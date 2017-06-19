@@ -1,0 +1,94 @@
+﻿@section styles{
+    @Styles.Render("~/Content/listcss")
+    <style type="text/css">
+        .pagination-detail {
+            display: none;
+        }
+
+        #dataTable {
+            margin-bottom: 30px;
+        }
+    </style>
+}
+<div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN THEME CUSTOMIZER-->
+            <!-- END THEME CUSTOMIZER-->
+            <h3 class="page-title">
+                角色管理
+                <small>角色管理</small>
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                </li>
+                <li>
+                    <a href="#">角色管理</a> <span class="divider">&nbsp;</span>
+                </li>
+                <li><a href="#">角色列表</a><span class="divider-last">&nbsp;</span></li>
+            </ul>
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row-fluid widget">
+        <div class="widget-body form">
+            <div class="span12"  style="margin-bottom: 30px;">
+                <table id="dataTable"></table>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE CONTENT-->
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Scripts/list")
+    <script type="text/javascript">
+        var $table = $('#dataTable');
+        var selectionIds = [];  //保存选中ids
+
+        $(function () {
+            var colitems = [{
+                field: 'RoleName',
+                title: '角色名称',
+                align: 'center',
+                sortable: true
+            },
+                {
+                    field: 'RoleCode',
+                    title: '角色编号',
+                    align: 'center',
+                    sortable: true
+                }, {
+                    field: 'RoleStatus',
+                    title: '是否启用',
+                    align: 'center',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        if (value == "1") {
+                            return '<img src="../../Content/img/tick.png" />';
+                        } else {
+                            return '<img src="../../Content/img/cross.png" />';
+                        }
+                    }
+                }
+            ];
+
+            var querys = function query(params) {
+                return params;
+            }
+
+            //初始化表格信息
+            InitiTable("dataTable", '@Url.Action("../Role/RoleIndex")', colitems, querys)
+        });
+
+        function responseHandler(res) {
+            $.each(res.rows, function (i, row) {
+                row.state = $.inArray(row.Id, selectionIds) != -1;  //判断当前行的数据id是否存在与选中的数组，存在则将多选框状态变为true
+            });
+            return res;
+        }
+    </script>
+}

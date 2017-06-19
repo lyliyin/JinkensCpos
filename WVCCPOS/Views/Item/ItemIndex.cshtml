@@ -1,0 +1,115 @@
+﻿@section styles{
+
+    @Styles.Render("~/Content/listcss")
+}
+<div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN THEME CUSTOMIZER-->
+            <!-- END THEME CUSTOMIZER-->
+            <h3 class="page-title">
+                商品管理
+                <small>商品管理</small>
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                </li>
+                <li>
+                    <a href="#">商品管理</a> <span class="divider">&nbsp;</span>
+                </li>
+                <li><a href="#">商品列表</a><span class="divider-last">&nbsp;</span></li>
+            </ul>
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row-fluid widget">
+        <div class="widget-body form">
+            <div class="span12">
+                <div class="col-sm-12">
+                    <div class="dataTables_wrapper form-inline span12" role="grid">
+                        <table id="dataTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE CONTENT-->
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Scripts/list")
+    <script type="text/javascript">
+        var $table = $('#dataTable');
+        var selectionIds = [];  //保存选中ids
+
+        $(function () {
+            var colitems = [{
+                field: 'BrandName',
+                title: '品牌名称',
+                align: 'center',
+                sortable: true
+            },
+                {
+                    field: 'CategoryName',
+                    title: '类别名称',
+                    align: 'center',
+                    sortable: true
+                },
+               {
+                   field: 'ItemName',
+                   title: '商品名称',
+                   align: 'center',
+                   sortable: true
+               }, {
+                   field: 'ItemSku',
+                   title: '商品规格',
+                   align: 'center',
+                   sortable: true
+               }, {
+                   field: 'ItemPrice',
+                   title: '销售价',
+                   align: 'center',
+                   sortable: true
+               }, {
+                   field: 'ItemStore',
+                   title: '库存',
+                   align: 'center',
+                   sortable: true
+               }, {
+                   field: 'ItemCount',
+                   title: '剩余数量',
+                   align: 'center',
+                   sortable: true
+               }
+               , {
+                   field: 'ItemCode',
+                   title: '商品编号',
+                   align: 'center',
+                   sortable: true
+               }, {
+                   field: 'Id',
+                   title: '操作',
+                   align: 'center',
+                   formatter: function (value, row, index) {
+                   }
+               }];
+
+            var querys = function query(params) {
+                return params;
+            }
+
+            //初始化表格信息
+            InitiTable("dataTable", '@Url.Action("../Item/ItemIndex")', colitems, querys)
+        });
+
+        function responseHandler(res) {
+            $.each(res.rows, function (i, row) {
+                row.state = $.inArray(row.Id, selectionIds) != -1;  //判断当前行的数据id是否存在与选中的数组，存在则将多选框状态变为true
+            });
+            return res;
+        }
+    </script>
+}

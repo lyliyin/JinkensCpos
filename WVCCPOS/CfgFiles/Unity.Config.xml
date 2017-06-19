@@ -1,0 +1,50 @@
+﻿<configuration>
+  <configSections>
+    <section name="unity" type="Microsoft.Practices.Unity.Configuration.UnityConfigurationSection, Microsoft.Practices.Unity.Configuration"/>
+  </configSections>
+  <unity>
+    <sectionExtension type="Microsoft.Practices.Unity.InterceptionExtension.Configuration.InterceptionConfigurationExtension, Microsoft.Practices.Unity.Interception.Configuration"/>
+    <containers>
+      <container name="ruanmouContainer">
+        <extension type="Interception"/>
+        <register type="System.Data.Entity.DbContext, EntityFramework" mapTo="DataModel.BuinessDBContext,DataModel"/>
+        <register type="IResponsity.ICategoryResponsity,IResponsity" mapTo="Responsity.CategoryResponsity,Responsity">
+        <!--<interceptor type="InterfaceInterceptor"/>
+        <interceptionBehavior type="IOCAttribute.LogBehavior,IOCAttribute"/>-->
+        </register>
+        <register type="IResponsity.IBrandResponsity,IResponsity" mapTo="Responsity.BrandResponsity,Responsity"/>
+        <register type="IResponsity.IItemImagesResponsity,IResponsity" mapTo="Responsity.ItemImagesResponsity,Responsity"/>
+        <register type="IResponsity.IItemPriceResponsity,IResponsity" mapTo="Responsity.ItemPriceResponsity,Responsity"/>
+        <register type="IResponsity.IItemResponsity,IResponsity" mapTo="Responsity.ItemResponsity,Responsity"/>
+        <register type="IResponsity.ILogisticsResponsity,IResponsity" mapTo="Responsity.LogisticsResponsity,Responsity"/>
+        <register type="IResponsity.IPriceSkuResponsity,IResponsity" mapTo="Responsity.PriceSkuResponsity,Responsity"/>
+        <register type="IResponsity.ISkuResponsity,IResponsity" mapTo="Responsity.SkuResponsity,Responsity"/>
+        <register type="IResponsity.ISupplierResponsity,IResponsity" mapTo="Responsity.SupplierResponsity,Responsity"/>
+        <register type="IResponsity.IMenuResponsity,IResponsity" mapTo="Responsity.MenuResponsity,Responsity"/>
+        <register type="IResponsity.IRoleMenuResponsity,IResponsity" mapTo="Responsity.RoleMenuResponsity,Responsity"/>
+        <register type="IResponsity.IRoleResponsity,IResponsity" mapTo="Responsity.RoleResponsity,Responsity"/>
+        <register type="IResponsity.IUserResponsity,IResponsity" mapTo="Responsity.UserResponsity,Responsity"/>
+        <register type="IResponsity.IUserRoleResponsity,IResponsity" mapTo="Responsity.UserRoleResponsity,Responsity"/>
+        <register type="IResponsity.IAmountDetailResponsity,IResponsity" mapTo="Responsity.AmountDetailResponsity,Responsity"/>
+        <register type="IResponsity.IPointsDetailResponsity,IResponsity" mapTo="Responsity.PointsDetailResponsity,Responsity"/>
+        <register type="IResponsity.ISysCardTypeGiftResponsity,IResponsity" mapTo="Responsity.SysCardTypeGiftResponsity,Responsity"/>
+        <register type="IResponsity.IVipAddressResponsity,IResponsity" mapTo="Responsity.VipAddressResponsity,Responsity"/>
+        <register type="IResponsity.IVipCouponMapResponsity,IResponsity" mapTo="Responsity.VipCouponMapResponsity,Responsity"/>
+        <register type="IResponsity.ISysCardTypeResponsity,IResponsity" mapTo="Responsity.SysCardTypeResponsity,Responsity"/>
+        <register type="IResponsity.IVipResponsity,IResponsity" mapTo="Responsity.VipsResponsity,Responsity"/>
+        <register type="IResponsity.IUnitResponsity,IResponsity" mapTo="Responsity.UnitResponsity,Responsity"/>
+        <register type="IResponsity.ICardUseUnitResponsity,IResponsity" mapTo="Responsity.CardUseUnitResponsity,Responsity"/>
+        <register type="IResponsity.ICouponCategoryResponsity,IResponsity" mapTo="Responsity.CouponCategoryResponsity,Responsity"/>
+        <register type="IResponsity.ICouponResponsity,IResponsity" mapTo="Responsity.CouponResponsity,Responsity"/>
+        <register type="IResponsity.IOrderReportResponsity,IResponsity" mapTo="Responsity.OrderReportResponsity,Responsity"/>
+        <register type="IResponsity.IOrderResponsity,IResponsity" mapTo="Responsity.OrderResponsity,Responsity"/>
+        <register type="IResponsity.IOrderDetailResponsity,IResponsity" mapTo="Responsity.OrderDetailResponsity,Responsity"/>
+        <register type="Application.UserApplication,Application" mapTo="Application.UserApplication,Application"/>
+        <register type="Application.ItemApplication,Application" mapTo="Application.ItemApplication,Application"/>
+        <register type="Application.VipApplication,Application" mapTo="Application.VipApplication,Application"/>
+        <register type="Application.OrderApplication,Application" mapTo="Application.OrderApplication,Application"/>
+        <register type="Redis.RedisSetService,Redis" mapTo="Redis.RedisSetService,Redis"/>
+      </container>
+    </containers>
+  </unity>
+</configuration>

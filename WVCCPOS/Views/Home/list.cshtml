@@ -1,0 +1,107 @@
+﻿@section styles{
+    @Styles.Render("~/bundles/listcss")
+    <link href="~/Content/bootstrap-table.css" rel="stylesheet" />
+}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN THEME CUSTOMIZER-->
+            <!-- END THEME CUSTOMIZER-->
+            <h3 class="page-title">
+                Form Components
+                <small>form components and widgets</small>
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                </li>
+                <li>
+                    <a href="#">Form Stuff</a> <span class="divider">&nbsp;</span>
+                </li>
+                <li><a href="#">Form Components</a><span class="divider-last">&nbsp;</span></li>
+            </ul>
+        </div>
+    </div>
+    <div id="page" class="dashboard">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget">
+                    <div class="widget-title">
+                        <h4><i class="icon-reorder"></i>Managed Table信息列表</h4>
+                    </div>
+                    <div class="widget-body">
+                        <div id="toolbar">
+                            <button class="btn btn-danger"><i class="icon-remove icon-white"></i>删除</button>
+                            <input type="text" name="UserName" id="UserName" placeholder="请输入用户名" />
+                            <a href="javascript:void(0)" class="btn btn-success">查询</a>
+                        </div>
+                        <div class="dataTables_wrapper form-inline" role="grid">
+                            <table id="dataTable"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @Scripts.Render("~/bundles/list")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var colitems = [
+            {
+                field: 'testkey',
+                title: '测试标识',
+                align: 'center',
+                sortable: true
+            }, {
+                field: 'testname',
+                title: '测试名字',
+                align: 'center',
+                sortable: true
+            }, {
+                field: 'phone',
+                title: '手机',
+                align: 'center',
+                sortable: true
+            }, {
+                field: 'email',
+                title: '邮箱',
+                align: 'center',
+                sortable: true
+            }, {
+                field: 'sex',
+                title: '性别',
+                align: 'center',
+                sortable: true
+            }, {
+                field: 'Age',
+                title: '年龄',
+                align: 'center',
+                sortable: true
+            }, {
+                field: 'id',
+                title: '操作',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    //通过formatter可以自定义列显示的内容
+                    //value：当前field的值，即id
+                    //row：当前行的数据
+                    return '<a href="' + row.Age + '" class="btn btn-success btn-mini" >测试</a>';
+                }
+            }];
+
+            var querys = function query(params) {
+                params["userAge"] = "123";
+                params["userName"] = $("#UserName").val();
+                return params;
+            }
+
+            //初始化表格信息
+            InitiTable("dataTable", '@Url.Action("list")', colitems, querys)
+            $(".btn-success").click(function (params) {
+                $table.bootstrapTable('refresh', params);  //搜索查询
+            });
+        });
+    </script>
+}

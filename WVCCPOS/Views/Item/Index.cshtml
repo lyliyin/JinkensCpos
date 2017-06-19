@@ -1,0 +1,203 @@
+﻿@model DataModel.GeneralModel.Category
+@section styles{
+
+    @*@Styles.Render("~/Conteent/listcss")*@
+    <link href="~/Content/bootstrap-table.css" rel="stylesheet" />
+    <link href="~/Content/treeview/bootstrap-treeview.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/Content/assets/gritter/css/jquery.gritter.css" />
+
+    @Styles.Render("~/Content/formaction")
+}
+@{
+    var ajaxOptions = new AjaxOptions
+    {
+        OnFailure = "onFailure",
+        OnSuccess = "onSuccess",
+        HttpMethod = "Post"
+    };
+}
+<div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN THEME CUSTOMIZER-->
+            <!-- END THEME CUSTOMIZER-->
+            <h3 class="page-title">
+                商品类别管理
+                <small>类别管理</small>
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                </li>
+                <li>
+                    <a href="#">商品类别管理</a> <span class="divider">&nbsp;</span>
+                </li>
+                <li><a href="#">类别列表</a><span class="divider-last">&nbsp;</span></li>
+            </ul>
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row-fluid widget">
+        <div class="widget-title">
+            <h4><i class="icon-reorder"></i>添加/用户</h4>
+        </div>
+        <div class="widget-body form">
+            <div class="span6>
+                <hr>
+                <h2>类别分类</h2>
+                <div class="col-sm-4">
+                    <div id="treeview12" class="treeview span3"></div>
+                    <div class="dataTables_wrapper form-inline span9" role="grid">
+                        <div id="toolbar">
+                            <a href="javascript:void(0)" class="btn btn-green">添加</a>
+                        </div>
+                        <table id="dataTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="myModal1" role="dialog" aria-hidden="true" class="modal hide fade">
+            <!-- BEGIN FORM-->
+            @using (Ajax.BeginForm("IndexICreate", "Item", null, ajaxOptions, new { @class = "form-horizontal", @style = "height:200px;" }))
+            {
+            @Html.AntiForgeryToken()
+
+            <div class="widget">
+                <div class="widget-title">
+                    <h4><i class="icon-reorder"></i>基本信息</h4>
+                </div>
+                <div class="widget-body form">
+
+                    <div class="control-group">
+                        <label class="control-label col-md-2" for="PCategoryName">上级节点</label>
+                        <div class="controls">
+                            <input class="text-box single-line" id="pCategoryName" name="pCategoryName" readonly="readonly" type="text">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="controls">
+                            @Html.EditorFor(model => model.CategoryName)
+                            @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "error-message" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.CategoryCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="controls">
+                            @Html.EditorFor(model => model.CategoryCode)
+                            @Html.ValidationMessageFor(model => model.CategoryCode, "", new { @class = "error-message" })
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-success" id="btnSave">提交</button>
+                        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    </div>
+                </div>
+            </div>
+            }
+            <!-- END FORM-->
+        </div>
+    </div>
+    <!-- END PAGE CONTENT-->
+</div>
+@section scripts{
+    @Scripts.Render("~/Scripts/FormAction")
+    @Scripts.Render("~/Scripts/TreeVIew")
+    @Scripts.Render("~/Scripts/jqueryval")
+    @Scripts.Render("~/Scripts/list")
+
+
+    <script type="text/javascript">
+        var $table = $('#dataTable');
+        function getTree() {
+            $.ajax({
+                type: "get",
+                url: '@Url.Action("GetNodes")',
+                dataType: "json",
+                success: function (json) {
+                    var result = JSON.stringify(json);
+                    $('#treeview12').treeview({
+                        data: "[" + result + "]",
+                        onNodeSelected: selectNodes
+                    });
+                }, error: function (json) {
+                    alert(json);
+                }
+            });
+        }
+        $(function () {
+            getTree();
+            var colitems = [
+           {
+               field: 'CategoryName',
+               title: '类别名称',
+               align: 'center',
+               sortable: true
+           }, {
+               field: 'CategoryCode',
+               title: '类别编号',
+               align: 'center',
+               sortable: true
+           }, {
+               field: 'id',
+               title: '操作',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   //通过formatter可以自定义列显示的内容
+                   //value：当前field的值，即id
+                   //row：当前行的数据
+                   return '<a href="' + row.Age + '" class="btn btn-success btn-mini" >测试</a>';
+               }
+           }];
+
+            var querys = function query(params) {
+                var Parameter = { nodeName: $("#pCategoryName").val() };
+                params["Paramter"] = Parameter;
+                return params;
+            }
+
+
+            //初始化表格信息
+            InitiTable("dataTable", '@Url.Action("../Item/Index")', colitems, querys)
+
+            //模块框
+            $(".btn-green").click(function (params) {
+                $('#myModal1').modal('show');
+            });
+
+            $("#btnCancel").click(function (e) {
+                e.preventDefault();
+                gridView.closeDeliverableDialog();
+            });
+        });
+
+        //成功 返回信息
+        function onSuccess(data) {
+            if (data.Code != 200) {
+                $.gritter.add(data.Message);
+            } else {
+                $('#myModal1').modal('hide');
+                $.gritter.removeAll();
+                getTree();
+            }
+        }
+
+        //失败返回信息
+        function onFailure(data) {
+            $.gritter.add(data.Message);
+        }
+
+        function selectNodes(event, data, params) {
+            $("#pCategoryName").val(data.text);
+            $table.bootstrapTable("selectPage", "1");
+        }
+
+        function responseHandler(res) {
+           
+            return res;
+        }
+    </script>
+}

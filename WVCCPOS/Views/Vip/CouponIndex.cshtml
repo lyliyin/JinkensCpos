@@ -1,0 +1,352 @@
+﻿@model DataModel.GeneralModel.CouponCategory
+@section styles{
+
+    @Styles.Render("~/Content/listcss")
+    <link href="~/Content/treeview/bootstrap-treeview.css" rel="stylesheet" />
+    @Styles.Render("~/Content/formaction")
+    <style type="text/css">
+        .modal {
+            width: 800px;
+            margin: 0 auto;
+            left: 20%;
+        }
+
+        .pagination-detail {
+            display: none;
+        }
+
+        .fixed-table-body {
+            margin-bottom: 35px;
+        }
+    </style>
+}
+@{
+    var ajaxOptions = new AjaxOptions
+    {
+        OnFailure = "onFailure",
+        OnSuccess = "onSuccess",
+        HttpMethod = "Post"
+    };
+}
+<div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN THEME CUSTOMIZER-->
+            <!-- END THEME CUSTOMIZER-->
+            <h3 class="page-title">
+                优惠券管理
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                </li>
+                <li>
+                    <a href="#">优惠券管理</a> <span class="divider">&nbsp;</span>
+                </li>
+                <li><a href="#">优惠券列表</a><span class="divider-last">&nbsp;</span></li>
+            </ul>
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row-fluid widget">
+        <div class="widget-body form">
+            <div class="span12">
+                <div class="col-sm-12">
+                    <div class="dataTables_wrapper form-inline span12" role="grid">
+                        <div id="toolbar">
+                            <a href="javascript:void(0)" class="btn btn-success btnAdd">添加</a>
+                        </div>
+                        <table id="dataTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="myModal1" role="dialog" aria-hidden="true" class="modal hide fade">
+            <!-- BEGIN FORM-->
+            @using (Ajax.BeginForm("AddCoupon", "Vip", null, ajaxOptions, new { @class = "form-horizontal", @style = "height:200px;" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="widget">
+                    <div class="widget-title">
+                        <h4><i class="icon-reorder"></i>基本信息</h4>
+                    </div>
+                    <div class="widget-body form">
+
+                        <div class="control-group">
+                            @Html.LabelFor(model => model.CouponName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="controls">
+                                @Html.EditorFor(model => model.CouponName)
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            @Html.LabelFor(model => model.CouponCodeFirst, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="controls">
+                                @Html.EditorFor(model => model.CouponCodeFirst)
+                                @Html.ValidationMessageFor(model => model.CouponCodeFirst, "", new { @class = "error-message" })
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            @Html.LabelFor(model => model.CouponCodeLast, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="controls">
+                                @Html.EditorFor(model => model.CouponCodeLast)
+                                @Html.ValidationMessageFor(model => model.CouponCodeLast, "", new { @class = "error-message" })
+                            </div>
+                        </div>
+
+
+                        <div class="control-group">
+                            @Html.LabelFor(model => model.CouponCount, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="controls">
+                                @Html.EditorFor(model => model.CouponCount)
+                                @Html.ValidationMessageFor(model => model.CouponCount, "", new { @class = "error-message" })
+                            </div>
+                        </div>
+
+
+                        <div class="control-group">
+                            @Html.LabelFor(model => model.CouponMoney, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="controls">
+                                @Html.EditorFor(model => model.CouponMoney)
+                                @Html.ValidationMessageFor(model => model.CouponMoney, "", new { @class = "error-message" })
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="controls">
+                                <div class="input-append date date-picker" data-date="102/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                    <input class="m-ctrl-medium date-picker" id="StartTime" name="StartTime" readonly="readonly" size="16" value="" type="text" /><span class="add-on"><i class="icon-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="control-group">
+                            @Html.LabelFor(model => model.EndTime, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="controls">
+                                <div class="input-append date date-picker" data-date="102/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                    <input class="m-ctrl-medium date-picker" id="EndTime" name="EndTime" readonly="readonly" size="16" value="" type="text" /><span class="add-on"><i class="icon-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success" id="btnSave">提交</button>
+                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!-- END FORM-->
+        </div>
+    </div>
+    <!-- END PAGE CONTENT-->
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Scripts/FormAction")
+    @Scripts.Render("~/Scripts/jqueryval")
+    @Scripts.Render("~/Scripts/list")
+
+    <script type="text/javascript">
+        var $table = $('#dataTable');
+        var selectionIds = [];  //保存选中ids
+
+        $(function () {
+            var colitems = [
+            {
+                field: 'state',
+                title: ' 全选',
+                align: 'center',
+                checkbox: true
+            },
+            {
+                field: 'CouponName',
+                title: ' 券名称',
+                align: 'center'
+            }, {
+                field: 'CouponMoney',
+                title: ' 券面值',
+                align: 'center'
+            }, {
+                field: 'CouponCodeFirst',
+                title: ' 前缀编号',
+                align: 'center'
+            }, {
+                field: 'CouponCodeLast',
+                title: '后缀编号',
+                align: 'center'
+            },
+           {
+               field: 'IsGIve',
+               title: '券类型',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   if (value == "1") {
+                       return "兑换券";
+                   } else {
+                       return "现金券";
+                   }
+               }
+           }, {
+               field: 'CouponCount',
+               title: '默认数量',
+               align: 'center',
+               sortable: true,
+           }, {
+               field: 'StartTime',
+               title: '开始时间',
+               align: 'center',
+               sortable: true,
+           }
+           , {
+               field: 'EndTime',
+               title: '结束时间 ',
+               align: 'center',
+               sortable: true,
+           }
+            , {
+                field: 'IsNotLimit',
+                title: '是否追加数量 ',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    if (value == "0") {
+                        return '<img src="../../Content/img/tick.png" />';
+                    } else {
+                        return '<img src="../../Content/img/cross.png" />';
+                    }
+
+                }
+            }, {
+                field: 'LaveCount',
+                title: '剩余数量 ',
+                align: 'center'
+            }, {
+                field: 'HasSend',
+                title: '是否已生成券 ',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    if (value == "1") {
+                        return '<img src="../../Content/img/tick.png" />';
+                    } else {
+                        return '<img src="../../Content/img/cross.png" />';
+                    }
+                }
+            }
+            , {
+                field: 'IsOverDue',
+                title: '状态 ',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    if (value == "-1") {
+                        return "失效";
+                    } else if (value == "1") {
+                        return "进行中";
+                    } else if (value == "2") {
+                        return "未开始";
+                    }
+                }
+            }
+           , {
+               field: 'Id',
+               title: '操作',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   //通过formatter可以自定义列显示的内容
+                   //value：当前field的值，即id
+                   //row：当前行的数据
+                   var html = "";
+
+                   if (row.HasSend == "0") {
+                       html += '<a href="javascript:void(0)" onclick=CreateCoupon("' + row.CouponCategoryId + '") class="btn btn-success btn-mini" >生成券</a>';
+                   }
+
+                   if (row.IsOverDue == "2") {  //未开始 可以删除
+                       html += '&nbsp;&nbsp;<a href="javascript:void(0)"   class="btn btn-danger btn-mini" >删除</a>';
+                   }
+
+                   return html;
+               }
+           }];
+
+            var querys = function query(params) {
+                return params;
+            }
+
+            $table.on('check.bs.table check-all.bs.table uncheck.bs.table uncheck-all.bs.table', function (e, rows) {
+                var ids = $.map(!$.isArray(rows) ? [rows] : rows, function (row) {
+                    return row.Id;
+                });
+                selectionIds.push(ids);
+            });
+
+          
+            //初始化表格信息
+            InitiTable("dataTable", '@Url.Action("../Vip/GetCouponIndex")', colitems, querys)
+
+
+            $(".date-picker").datepicker({
+                language: "zh-CN",
+                autoclose: true,//选中之后自动隐藏日期选择框
+                clearBtn: false,//清除按钮
+                todayBtn: false,//今日按钮
+                format: "yyyy-mm-dd"
+            });
+
+            //模块框
+            $(".btnAdd").click(function (params) {
+                $('#myModal1').modal('show');
+            });
+
+            $("#btnCancel").click(function (e) {
+                e.preventDefault();
+                gridView.closeDeliverableDialog();
+            });
+        });
+
+        function Show(BrandCode, BrandName, Id) {
+            $("#Id").val(Id);
+            $("#BrandName").val(BrandName);
+            $("#BrandCode").val(BrandCode);
+            $('#myModal1').modal('show');
+        }
+
+        function onSuccess(data) {
+            if (data.Code != 200) {
+                alert(data.Message);
+            } else {
+                alert(data.Message);
+                $('#myModal1').modal('hide');
+                $("#Id").val("");
+                $("#BrandName").val("");
+                $("#BrandCode").val("");
+                $table.bootstrapTable("refresh");
+            }
+        }
+
+        function responseHandler(res) {
+            $.each(res.rows, function (i, row) {
+                row.state = $.inArray(row.Id, selectionIds) != -1;  //判断当前行的数据id是否存在与选中的数组，存在则将多选框状态变为true
+            });
+            return res;
+        }
+
+        function CreateCoupon(CouponCategoryId) {
+            $.ajax({
+                type: "post",
+                url: '@Url.Action("CreateCoupon")',
+                data: { CouponCategoryId: CouponCategoryId },
+                dataType: "json",
+                success: function (data) {
+                    alert("生成成功！" + data.Message);
+                }, error: function (data) {
+                    alert(data.Message);
+                }
+            });
+        }
+    </script>
+}

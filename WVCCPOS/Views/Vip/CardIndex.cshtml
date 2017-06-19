@@ -1,0 +1,158 @@
+﻿@section styles{
+    <link href="@Url.Content("~/Content/assets/fancybox/source/jquery.fancybox.css")" rel="stylesheet" />
+}
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN INLINE NOTIFICATIONS widget-->
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-cogs"></i>会员卡管理</h4>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse"></a>
+                    <a href="#widget-config" data-toggle="modal" class="config"></a>
+                    <a href="javascript:;" class="reload"></a>
+                    <a href="javascript:;" class="remove"></a>
+                </div>
+            </div>
+            <div class="widget-body">
+                <div class="row-fluid cardlist hide" style="margin-bottom:20px;">
+                    <div class="span3">
+                        <div class="pricing-table pricing-danger">
+                            <div class="pricing-head">
+                                <h3 style="background-color:#dc5d3a;">
+                                    会员卡基本信息
+                                </h3>
+                            </div>
+                            <ul style="margin:0;">
+                                <li><img src="~/Content/img/会员卡.png" style="height:150px;" /></li>
+                                <li style="margin-top:25px;border-bottom:none;">卡名称： <input class="input-medium" type="text" value="小银子" placeholder="卡名称不能重复" /> </li>
+                            </ul>
+                            <div class="price-actions">
+                                <a class="btn btn-danger" href="javascript:void(0)">保存</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="spance10 visible-phone"></div>
+                    <div class="span3">
+                        <div class="pricing-table pricing-info">
+                            <div class="pricing-head">
+                                <h3 style="background-color:#22c0cb;"> 升级规则 </h3>
+                            </div>
+                            <ul>
+                                <li>折扣：<input class="input-medium" name="CardDiscount" type="text" placeholder="" /></li>
+                                <li>
+                                    <div class="controls">
+                                        <label class="radio">
+                                            <input type="radio" class="UpgradeType" value="1" checked="checked">
+                                            消费升级
+                                        </label>
+                                        <label class="radio">
+                                            <input type="radio" class="UpgradeType" value="2">
+                                            充值升级
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="Sale">累次消费：<input disabled="disabled" class="input-medium" name="CardDiscount" type="text" placeholder="" /></li>
+                                <li class="Sale" style="height:28px; border-bottom:none;">首次消费：<input class="input-medium" name="CardDiscount" type="text" placeholder="" /></li>
+                                <li class="Recharge hide">累次充值：<input class="input-medium" name="CardDiscount" type="text" placeholder="" /></li>
+                                <li class="Recharge hide" style="height:28px; border-bottom:none;">首次充值：<input class="input-medium" name="CardDiscount" disabled="disabled" type="text" placeholder="" /></li>
+
+                            </ul>
+                            <div class="price-actions">
+                                <a class="btn btn-info" href="javascript:void(0)">保存</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="spance10 visible-phone"></div>
+                    <div class="span3">
+                        <div class="pricing-table pricing-success">
+                            <div class="pricing-head ">
+                                <h3 style="background-color:#70BB2E;">开卡礼</h3>
+                            </div>
+                            <ul style="min-height:235px;"></ul>
+                            <div class="price-actions">
+                                <a href="javascript:void(0)" class="btn btn-inverse">新增</a>
+                                <a class="btn btn-success" href="javascript:void(0)">保存</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="spance10 visible-phone"></div>
+                    <div class="span3">
+                        <div class="pricing-table pricing-warning">
+                            <div class="pricing-head">
+                                <h3 style="background-color:#fb9800;"> 适用门店</h3>
+                            </div>
+                            <ul style="min-height:235px;"></ul>
+                            <div class="price-actions">
+                                <a href="javascript:void(0)" class="btn">新增</a>
+                                <a class="btn btn-warning" href="javascript:void(0)">保存</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+
+        $(function () {
+            InitiData();
+            //$(".UpgradeType").click(function () {
+            //    if ($(this).val() == "1") {
+            //        $(".Sale").removeClass("hide");
+            //        $(".Recharge").addClass("hide");
+            //    } else {
+            //        $(".Sale").addClass("hide");
+            //        $(".Recharge").removeClass("hide");
+            //    }
+            //});
+        })
+
+        function InitiData() {
+            $.ajax({
+                type: "post",
+                url: '../../Vip/GetCardTypeList',
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    for (var i = 0; i < data.rows.length; i++) {
+                        var clone = $(".cardlist:eq(0)").clone(true);
+                        clone.removeClass("hide");
+                        var SysCardTypeName = clone.children(".span3").children(".pricing-table").children(":eq(1)").children(":eq(1)").children("input");
+                        var SysCardTypeImage = clone.children(".span3").children(".pricing-table").children(":eq(1)").children(":eq(0)").children("img");
+                        SysCardTypeName.val(data.rows[i].SysCardName);
+                        SysCardTypeImage.attr("src", data.rows[i].SysCardTypeIMages);
+                        var SysDiscount = clone.children(":eq(2)").children(".pricing-table").children("ul").children("li:eq(0)").children("input");
+                        SysDiscount.val(data.rows[i].DisCount);
+                        var images = data.rows[i].couponcategorys;
+                        var myunit = data.rows[i].units;
+                        var imageshtml = "";
+                        var unitshtml = "";
+                        if (images.length > 0) {
+                            for (var j = 0; j < images.length; j++) {
+                                imageshtml += '<li style="border-bottom:none;"><img src="' + images[j].CouponImages + '" /></li>';
+                            }
+                        }
+
+                        if (myunit.length > 0) {
+                            for (var j = 0; j < myunit.length; j++) {
+                                unitshtml += '<li>' + myunit[j].UnitName + '</li>';
+                            }
+                        }
+                        //图片
+                        clone.children(":eq(4)").children(".pricing-table").children("ul").html(imageshtml);
+                        //门店
+                        clone.children(":eq(6)").children(".pricing-table").children("ul").html(unitshtml);
+                        $(".cardlist:eq(0)").parent().append(clone);
+                    }
+
+                }, error: function (data) {
+                    alert(data.Message);
+                }
+            });
+        }
+    </script>
+}

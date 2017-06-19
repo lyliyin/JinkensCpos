@@ -1,0 +1,220 @@
+﻿@model DataModel.GeneralModel.Brand
+@section styles{
+
+    @Styles.Render("~/Content/listcss")
+    <link href="~/Content/bootstrap-table.css" rel="stylesheet" />
+    <link href="~/Content/treeview/bootstrap-treeview.css" rel="stylesheet" />
+    @Styles.Render("~/Content/formaction")
+}
+@{
+    var ajaxOptions = new AjaxOptions
+    {
+        OnFailure = "onFailure",
+        OnSuccess = "onSuccess",
+        HttpMethod = "Post"
+    };
+}
+<div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN THEME CUSTOMIZER-->
+            <!-- END THEME CUSTOMIZER-->
+            <h3 class="page-title">
+                品牌管理
+                <small>品牌管理</small>
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                </li>
+                <li>
+                    <a href="#">品牌管理</a> <span class="divider">&nbsp;</span>
+                </li>
+                <li><a href="#">品牌列表</a><span class="divider-last">&nbsp;</span></li>
+            </ul>
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row-fluid widget">
+        <div class="widget-body form">
+            <div class="span12">
+                <div class="col-sm-4">
+                    <div class="dataTables_wrapper form-inline span9" role="grid">
+                        <div id="toolbar">
+                            <a href="javascript:void(0)" class="btn btn-success btnAdd">添加</a>
+                            <a href="javascript:void(0)" class="btn btn-danger">删除</a>
+                        </div>
+                        <table id="dataTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="myModal1" role="dialog" aria-hidden="true" class="modal hide fade">
+            <!-- BEGIN FORM-->
+            @using (Ajax.BeginForm("BrandIndexICreate", "Item", null, ajaxOptions, new { @class = "form-horizontal", @style = "height:200px;" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="widget">
+                    <div class="widget-title">
+                        <h4><i class="icon-reorder"></i>基本信息</h4>
+                    </div>
+                    <div class="widget-body form">
+
+                        <div class="control-group hide">
+                            @Html.LabelFor(model => model.BrandName, htmlAttributes: new { @class = "control-label col-md-2 hide" })
+                            <div class="controls">
+                                @Html.EditorFor(model => model.Id, new { @class = "hide" })
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            @Html.LabelFor(model => model.BrandName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="controls">
+                                @Html.EditorFor(model => model.BrandName)
+                                @Html.ValidationMessageFor(model => model.BrandName, "", new { @class = "error-message" })
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            @Html.LabelFor(model => model.BrandCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="controls">
+                                @Html.EditorFor(model => model.BrandCode)
+                                @Html.ValidationMessageFor(model => model.BrandCode, "", new { @class = "error-message" })
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">图片信息</label>
+                            <div class="controls">
+                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                    <input value="" name="images" class="images" type="hidden">
+                                    <div multiple="true" class="fileupload-preview fileupload-exists thumbnail" style="max-width: 100%; display:block; text-align:left;">
+                                        <div class="dropzone">
+                                            <div class="preview error image-preview" style="display:none;">
+                                                <div class="details">
+                                                    <img alt="" src="">
+                                                </div>
+                                                <div class="error-mark"><span>✘</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-left:35px;">
+                                        <span class="btn btn-file">
+                                            <span class="fileupload-new">上传图片</span>
+                                            <span class="fileupload-exists">继续上传</span>
+                                            <input class="default" name="" type="file" accept="image/*" />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success" id="btnSave">提交</button>
+                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!-- END FORM-->
+        </div>
+    </div>
+    <!-- END PAGE CONTENT-->
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Scripts/FormAction")
+    @Scripts.Render("~/Scripts/jqueryval")
+    @Scripts.Render("~/Scripts/list")
+
+    <script type="text/javascript">
+        var $table = $('#dataTable');
+        var selectionIds = [];  //保存选中ids
+
+        $(function () {
+            var colitems = [{
+                field: 'state',
+                title: '全选',
+                align: 'center',
+                checkbox: true,
+                width: '20px'
+            },
+           {
+               field: 'BrandName',
+               title: '品牌名称',
+               align: 'center',
+               sortable: true
+           }, {
+               field: 'BrandCode',
+               title: '品牌编号',
+               align: 'center',
+               sortable: true
+           }, {
+               field: 'Id',
+               title: '操作',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   //通过formatter可以自定义列显示的内容
+                   //value：当前field的值，即id
+                   //row：当前行的数据
+                   return '<a href="javascript:void(0)" onclick=Show("' + row.BrandCode + '","' + row.BrandName + '","' + row.Id + '") class="btn btn-success btn-mini" >修改</a>';
+               }
+           }];
+
+            var querys = function query(params) {
+                return params;
+            }
+
+            $table.on('check.bs.table check-all.bs.table uncheck.bs.table uncheck-all.bs.table', function (e, rows) {
+                var ids = $.map(!$.isArray(rows) ? [rows] : rows, function (row) {
+                    return row.Id;
+                });
+                selectionIds.push(ids);
+            });
+
+
+            //初始化表格信息
+            InitiTable("dataTable", '@Url.Action("../Item/BrandIndex")', colitems, querys)
+
+
+            //模块框
+            $(".btnAdd").click(function (params) {
+                $('#myModal1').modal('show');
+            });
+
+            $("#btnCancel").click(function (e) {
+                e.preventDefault();
+                gridView.closeDeliverableDialog();
+            });
+        });
+
+        function Show(BrandCode, BrandName, Id) {
+            $("#Id").val(Id);
+            $("#BrandName").val(BrandName);
+            $("#BrandCode").val(BrandCode);
+            $('#myModal1').modal('show');
+        }
+
+        function onSuccess(data) {
+            if (data.Code != 200) {
+                alert(data.Message);
+            } else {
+                alert(data.Message);
+                $('#myModal1').modal('hide');
+                $("#Id").val("");
+                $("#BrandName").val("");
+                $("#BrandCode").val("");
+                $table.bootstrapTable("refresh");
+            }
+        }
+
+        function responseHandler(res) {
+            $.each(res.rows, function (i, row) {
+                row.state = $.inArray(row.Id, selectionIds) != -1;  //判断当前行的数据id是否存在与选中的数组，存在则将多选框状态变为true
+            });
+            return res;
+        }
+    </script>
+}

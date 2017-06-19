@@ -1,0 +1,89 @@
+﻿
+@{
+
+    Layout = null;
+}
+
+<div id="sidebar" class="nav-collapse collapse">
+    <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+    <div class="sidebar-toggler hidden-phone"></div>
+    <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+    <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+    <div class="navbar-inverse">
+        <form class="navbar-search visible-phone">
+            <input type="text" class="search-query" placeholder="Search" />
+        </form>
+    </div>
+    <!-- END RESPONSIVE QUICK SEARCH FORM -->
+    <!-- BEGIN SIDEBAR MENU -->
+    <ul class="sidebar-menu">
+        <li class="has-sub">
+            <a href="javascript:;" class="">
+                <span class="icon-box"> <i class="icon-cogs"></i></span> 系统设置
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub">
+                <li><a class="" href="@Url.Action("UserIndex","Role")">员工用户</a></li>
+                <li><a class="" href="@Url.Action("Index","Role")">角色管理</a></li>
+                <li><a class="" href="ui_elements_tabs_accordions.html">权限管理</a></li>
+            </ul>
+        </li>
+        <li class="has-sub">
+            <a href="javascript:;" class="">
+                <span class="icon-box"><i class="icon-fire"></i></span>商品管理
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub">
+                <li><a class="" href="@Url.Action("BrandIndex","Item")">品牌管理</a></li>
+                <li><a class="" href="data_table.html">经销商管理</a></li>
+                <li><a class="" href="@Url.Action("Index","Item")">商品类别管理</a></li>
+                <li><a class="" href="charts.html">规格管理</a></li>
+                <li><a class="" href="@Url.Action("Item","ItemIndex")">商品管理</a></li>
+            </ul>
+        </li>
+        <li class="has-sub">
+            <a href="javascript:;" class="">
+                <span class="icon-box"><i class="icon-tasks"></i></span>会员金矿
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub">
+                <li><a class="" href="@Url.Action("CouponIndex","Vip")">优惠券管理</a></li>
+                <li><a class="" href="@Url.Action("CardIndex","Vip")">会员卡管理</a></li>
+                <li><a class="" href="@Url.Action("VipIndex","Vip")">会员管理</a></li>
+            </ul>
+        </li>
+
+        <li class="has-sub">
+            <a href="javascript:;" class="">
+                <span class="icon-box"><i class="icon-map-marker"></i></span> 订单管理
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub">
+                <li><a class="" href="maps_google.html"> 奖励规则</a></li>
+                <li><a class="" href="maps_vector.html"> 退货规则</a></li>
+                <li><a class="" href="@Url.Action("Index","Order")"> 订单管理</a></li>
+            </ul>
+        </li>
+        <li class="has-sub">
+            <a href="javascript:;" class="">
+                <span class="icon-box"><i class="icon-file-alt"></i></span> 消息管理
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub">
+                <li><a class="" href="@Url.Action("Index","MessageCalendar")">消息日历</a></li>
+            </ul>
+        </li>
+        <li class="has-sub">
+            <a href="javascript:;" class="">
+                <span class="icon-box"><i class="icon-glass"></i></span> 统计查询
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub">
+                <li><a class="" href="lock.html">商品销售统计</a></li>
+                <li><a class="" href="@Url.Action("OrderStatistiscIndex","Order")">订单统计</a></li>
+            </ul>
+        </li>
+    </ul>
+    <!-- END SIDEBAR MENU -->
+</div>
+

@@ -1,0 +1,167 @@
+﻿@model DataModel.GeneralModel.CouponCategory
+@section styles{
+
+    @Styles.Render("~/Content/listcss")
+    <link href="~/Content/treeview/bootstrap-treeview.css" rel="stylesheet" />
+    @Styles.Render("~/Content/formaction")
+    <style type="text/css">
+        .modal {
+            width: 800px;
+            margin: 0 auto;
+            left: 20%;
+        }
+
+        .fixed-table-body {
+            margin-bottom: 35px;
+        }
+    </style>
+}
+@{
+    var ajaxOptions = new AjaxOptions
+    {
+        OnFailure = "onFailure",
+        OnSuccess = "onSuccess",
+        HttpMethod = "Post"
+    };
+}
+<div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN THEME CUSTOMIZER-->
+            <!-- END THEME CUSTOMIZER-->
+            <h3 class="page-title">
+                会员管理
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                </li>
+                <li><a href="#">会员列表</a><span class="divider-last">&nbsp;</span></li>
+            </ul>
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row-fluid widget">
+        <div class="widget-body form">
+            <div class="span12">
+                <div class="col-sm-12">
+                    <div class="dataTables_wrapper form-inline span12" role="grid">
+                        <div id="toolbar">
+                            <a href="javascript:void(0)" class="btn btn-success btnAdd">添加</a>
+                        </div>
+                        <table id="dataTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE CONTENT-->
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Scripts/FormAction")
+    @Scripts.Render("~/Scripts/jqueryval")
+    @Scripts.Render("~/Scripts/list")
+
+    <script type="text/javascript">
+        var $table = $('#dataTable');
+        var selectionIds = [];  //保存选中ids
+
+        $(function () {
+            var colitems = [
+            {
+                field: 'VipName',
+                title: ' 名称',
+                align: 'center'
+            }, {
+                field: 'VipPhone',
+                title: ' 手机',
+                align: 'center'
+            }, {
+                field: 'VipEmail',
+                title: ' 邮箱',
+                align: 'center'
+            }, {
+                field: 'VipPoints',
+                title: '积分',
+                align: 'center',
+                sortable: true,
+            },
+           {
+               field: 'VipAmount',
+               title: '余额',
+               align: 'center',
+               sortable: true,
+           }, {
+               field: 'SoourceName',
+               title: '来源渠道',
+               align: 'center',
+
+           }
+           , {
+               field: 'Id',
+               title: '操作',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   return '<a href="../Vip/IndexII/' + row.Id + '" class="btn-mini btn btn-warning"><i class="icon-eye-open"></i>详情</a>';
+               }
+           }];
+
+            var querys = function query(params) {
+                return params;
+            }
+
+            $table.on('check.bs.table check-all.bs.table uncheck.bs.table uncheck-all.bs.table', function (e, rows) {
+                var ids = $.map(!$.isArray(rows) ? [rows] : rows, function (row) {
+                    return row.Id;
+                });
+                selectionIds.push(ids);
+            });
+
+
+            //初始化表格信息
+            InitiTable("dataTable", '@Url.Action("../Vip/GetVipIndex")', colitems, querys)
+
+
+
+            //模块框
+            $(".btnAdd").click(function (params) {
+                $('#myModal1').modal('show');
+            });
+
+            $("#btnCancel").click(function (e) {
+                e.preventDefault();
+                gridView.closeDeliverableDialog();
+            });
+        });
+
+        function Show(BrandCode, BrandName, Id) {
+            $("#Id").val(Id);
+            $("#BrandName").val(BrandName);
+            $("#BrandCode").val(BrandCode);
+            $('#myModal1').modal('show');
+        }
+
+        function onSuccess(data) {
+            if (data.Code != 200) {
+                alert(data.Message);
+            } else {
+                alert(data.Message);
+                $('#myModal1').modal('hide');
+                $("#Id").val("");
+                $("#BrandName").val("");
+                $("#BrandCode").val("");
+                $table.bootstrapTable("refresh");
+            }
+        }
+
+        function responseHandler(res) {
+            $.each(res.rows, function (i, row) {
+                row.state = $.inArray(row.Id, selectionIds) != -1;  //判断当前行的数据id是否存在与选中的数组，存在则将多选框状态变为true
+            });
+            return res;
+        }
+    </script>
+}

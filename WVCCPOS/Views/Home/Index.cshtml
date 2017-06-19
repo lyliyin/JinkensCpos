@@ -1,0 +1,167 @@
+﻿<div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN THEME CUSTOMIZER-->
+            <div id="theme-change" class="hidden-phone">
+                <i class="icon-cogs"></i>
+                <span class="settings">
+                    <span class="text">Theme:</span>
+                    <span class="colors">
+                        <span class="color-default" data-style="default"></span>
+                        <span class="color-gray" data-style="gray"></span>
+                        <span class="color-purple" data-style="purple"></span>
+                        <span class="color-navy-blue" data-style="navy-blue"></span>
+                    </span>
+                </span>
+            </div>
+            <!-- END THEME CUSTOMIZER-->
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            <h3 class="page-title">
+                Dashboard
+                <small> General Information </small>
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                </li>
+                <li>
+                    <a href="#">Admin Lab</a> <span class="divider">&nbsp;</span>
+                </li>
+                <li><a href="#">Dashboard</a><span class="divider-last">&nbsp;</span></li>
+                <li class="pull-right search-wrap">
+                    <form class="hidden-phone">
+                        <div class="search-input-area">
+                            <input id=" " class="search-query" type="text" placeholder="Search">
+                            <i class="icon-search"></i>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+            <!-- END PAGE TITLE & BREADCRUMB-->
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div id="page" class="dashboard">
+        <!-- BEGIN OVERVIEW STATISTIC BLOCKS-->
+        <div class="row-fluid circle-state-overview">
+            <div class="span3 responsive" data-tablet="span3" data-desktop="span3">
+                <div class="circle-stat block">
+                    <div class="visual">
+                        <div class="circle-state-icon">
+                            <i class="icon-user turquoise-color"></i>
+                        </div>
+                        <input class="knob" data-width="100" data-height="100" data-displayPrevious=true data-thickness=".2" value="35" data-fgColor="#4CC5CD" data-bgColor="#ddd">
+                    </div>
+                    <div class="details">
+                        <div class="number">+33</div>
+                        <div class="title">总管理员量</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="span3 responsive" data-tablet="span3" data-desktop="span3">
+                <div class="circle-stat block">
+                    <div class="visual">
+                        <div class="circle-state-icon">
+                            <i class="icon-tags red-color"></i>
+                        </div>
+                        <input class="knob" data-width="100" data-height="100" data-displayPrevious=true data-thickness=".2" value="65" data-fgColor="#e17f90" data-bgColor="#ddd" />
+                    </div>
+                    <div class="details">
+                        <div class="number">987$</div>
+                        <div class="title">今日销售额</div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="span3 responsive" data-tablet="span3" data-desktop="span3">
+                <div class="circle-stat block">
+                    <div class="visual">
+                        <div class="circle-state-icon">
+                            <i class="icon-shopping-cart green-color"></i>
+                        </div>
+                        <input class="knob" data-width="100" data-height="100" data-displayPrevious=true data-thickness=".2" value="30" data-fgColor="#a8c77b" data-bgColor="#ddd" />
+                    </div>
+                    <div class="details">
+                        <div class="number">+320</div>
+                        <div class="title">今日订单量</div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="span2 responsive" data-tablet="span3" data-desktop="span2">
+                <div class="circle-stat block">
+                    <div class="visual">
+                        <div class="circle-state-icon">
+                            <i class="icon-eye-open purple-color"></i>
+                        </div>
+                        <input class="knob" data-width="100" data-height="100" data-displayPrevious=true data-thickness=".2" value="45" data-fgColor="#c8abdb" data-bgColor="#ddd" />
+                    </div>
+                    <div class="details">
+                        <div class="number">+987</div>
+                        <div class="title">今日访客量</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- END OVERVIEW STATISTIC BLOCKS-->
+
+        <div class="row-fluid">
+            <div class="span8">
+                <!-- BEGIN SITE VISITS PORTLET-->
+                <div class="widget">
+                    <div class="widget-title">
+                        <h4><i class="icon-bar-chart"></i> Line Chart</h4>
+                        <span class="tools">
+                            <a href="javascript:;" class="icon-chevron-down"></a>
+                            <a href="javascript:;" class="icon-remove"></a>
+                        </span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="site_statistics_loading">
+                            <img src="@Url.Content("~/COntent/img/loading.gif")" alt="loading" />
+                        </div>
+                        <div id="site_statistics_content" class="hide">
+                            <div id="site_statistics" class="chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SITE VISITS PORTLET-->
+            </div>
+            <div class="span4">
+                <!-- BEGIN SERVER LOAD PORTLET-->
+                <div class="widget">
+                    <div class="widget-title">
+                        <h4><i class="icon-umbrella"></i> Live Chart</h4>
+                        <span class="tools">
+                            <a href="javascript:;" class="icon-chevron-down"></a>
+                            <a href="javascript:;" class="icon-remove"></a>
+                        </span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="load_statistics_loading">
+                            <img src="@Url.Content("~/COntent/img/loading.gif")" alt="loading" />
+                        </div>
+                        <div id="load_statistics_content" class="hide" style="margin: 0px 0 20px 0">
+                            <div id="load_statistics" class="chart" style="height: 280px"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SERVER LOAD PORTLET-->
+            </div>
+
+        </div>
+        <!-- BEGIN SQUARE STATISTIC BLOCKS-->
+        <!-- END SQUARE STATISTIC BLOCKS-->
+
+
+    </div>
+    <!-- END PAGE CONTENT-->
+</div>

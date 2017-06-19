@@ -1,0 +1,379 @@
+﻿@model DTO.VipInfoRes
+@section styles{
+    <style type="text/css">
+        .pagination-detail {
+            display: none;
+        }
+    </style>
+}
+@{
+    var PointsAjaxOptions = new AjaxOptions
+    {
+        OnFailure = "onFailure",
+        OnSuccess = "onPointsSuccess",
+        HttpMethod = "Post"
+    };
+
+    var AmountAjaxOptions = new AjaxOptions
+    {
+        OnFailure = "onFailure",
+        OnSuccess = "onAmountSuccess",
+        HttpMethod = "Post"
+    };
+}
+<div class="row-fluid">
+    <div class="widget">
+        <div class="widget-title">
+            <h4><i class="icon-reorder"></i>基本信息</h4>
+            <span class="tools">
+                <a href="javascript:;" class="icon-chevron-down"></a>
+                <a href="javascript:;" class="icon-remove"></a>
+            </span>
+        </div>
+        <div class="widget-body">
+            <div class="row-fluid">
+                <div class="span6">
+                    <h3>个人简介</h3>
+                    <div>
+                        <p style="margin-right:25px;"><img class="pull-left" src="~/Content/img/img1.png" style="width:280px; height:250px;" /></p>
+                        <p style="margin-left:25px;">
+                            工作以来公共交通领域进行了品牌推广的实践学习，实现理论对于工作的深度指导。个人性格开朗、为人慷慨大方、人缘佳。学习能力强，在团队中敢于担当，善于与团队合作进取，对于个人与事业的综合发展有清晰的规划和思考。
+                        </p>
+                    </div>
+                    <p>
+                        <button class="btn btn-danger btnPoints"><i class="icon-remove icon-white"></i> 调整积分</button>
+                        <button class="btn btn-danger btnAmount"><i class="icon-remove icon-white"></i> 调整余额</button>
+                    </p>
+                </div>
+                <div class="span6">
+                    <h3>基本信息</h3>
+                    <div class="well">
+                        <address>
+                            <strong>姓名：</strong> @Model.VipName &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <strong>手机：</strong> <abbr title="Phone"></abbr>@Model.VipPhone  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <strong>家庭地址：</strong> <abbr title="Phone"></abbr>湖北省武汉市江汉区杭浦大街1号
+                        </address>
+                        <address>
+                            <strong>邮箱：</strong>
+                            <a href="mailto:#">@Model.VipEmail  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                            <strong>出生年月日：</strong> 2016-09-11 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <strong>性别：</strong> 男 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <strong>剩余积分：</strong> @Model.VipPoints
+                        </address>
+                        <address>
+                            <strong>剩余余额：</strong> @Model.VipAmount
+                        </address>
+                    </div>
+                </div>
+                <div class="span11" style="margin-top:25px;">
+                    <!--BEGIN TABS-->
+                    <div class="tabbable tabbable-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="javascript:void(0)" data-toggle="tab">积分使用明细</a></li>
+                            <li class=""><a href="javascript:void(0)" data-toggle="tab">余额使用明细</a></li>
+                            <li class=""><a href="javascript:void(0)" data-toggle="tab">订单明细</a></li>
+                            <li class=""><a href="javascript:void(0)" data-toggle="tab">优惠券明细</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1_1">
+                                <div class="dataTables_wrapper form-inline span10" role="grid">
+                                    <table id="dataTable"></table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab_1_2">
+                                <div class="dataTables_wrapper form-inline span10" role="grid">
+                                    <table id="dataTable2"></table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab_1_3">
+                                <div class="dataTables_wrapper form-inline span10" role="grid">
+                                    <table id="dataTable3"></table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab_1_4">
+                                <div class="dataTables_wrapper form-inline span10" role="grid">
+                                    <table id="dataTable4"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--END TABS-->
+                </div>
+            </div>
+        </div>
+        <div id="PointsModal" role="dialog" aria-hidden="true" class="modal hide fade">
+            <!-- BEGIN FORM-->
+            @using (Ajax.BeginForm("VipPointsCreate", "Vip", null, PointsAjaxOptions, new { @class = "form-horizontal", @style = "height:200px;" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="widget">
+                    <div class="widget-title">
+                        <h4><i class="icon-reorder"></i>调整积分信息</h4>
+                    </div>
+                    <div class="widget-body form">
+
+                        <div class="control-group">
+                            <label class="control-label col-md-2" for="PointsSourceId">调整原因</label>
+                            <div class="controls">
+                                <select name="PointsSourceId" id="PointsSourceId">
+                                    <option value="5" selected="selected">
+                                        活动赠送
+                                    </option>
+                                    <option value="20">
+                                        退回积分
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label col-md-2" for="Points">调整基数</label>
+                            <div class="controls">
+                                <input class="text-box single-line" required="required" id="Points" name="Points" type="text">
+                            </div>
+                        </div>
+
+                        <input class="text-box single-line" id="VipId" name="VipId" value="@Model.Id" type="hidden">
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success" id="btnSave">提交</button>
+                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!-- END FORM-->
+        </div>
+
+        <div id="AmountModal" role="dialog" aria-hidden="true" class="modal hide fade">
+            <!-- BEGIN FORM-->
+            @using (Ajax.BeginForm("VipAmountCreate", "Vip", null, AmountAjaxOptions, new { @class = "form-horizontal", @style = "height:200px;" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="widget">
+                    <div class="widget-title">
+                        <h4><i class="icon-reorder"></i>调整余额信息</h4>
+                    </div>
+                    <div class="widget-body form">
+
+                        <div class="control-group">
+                            <label class="control-label col-md-2" for="AmountSourceId">调整原因</label>
+                            <div class="controls">
+                                <select name="AmountSourceId" id="AmountSourceId">
+                                    <option value="5" selected="selected">
+                                        活动赠送
+                                    </option>
+                                    <option value="20">
+                                        退回余额
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label col-md-2" for="Amount">调整基数</label>
+                            <div class="controls">
+                                <input class="text-box single-line" required="required" id="Amount" name="Amount" type="text">
+                            </div>
+                        </div>
+
+                        <input class="text-box single-line" id="VipId" name="VipId" value="@Model.Id" type="hidden">
+
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success" id="btnSave">提交</button>
+                            <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!-- END FORM-->
+        </div>
+    </div>
+</div>
+@section scripts{
+    @Scripts.Render("~/Scripts/FormAction")
+    @Scripts.Render("~/Scripts/list");
+    <script type="text/javascript">
+        var $table = $("#dataTable");
+        var Index = 1;
+        $(function () {
+            var colitems = [
+            {
+                field: 'Name',
+                title: ' 使用途径',
+                align: 'center'
+            }, {
+                field: 'Points',
+                title: ' 使用积分',
+                align: 'center'
+            }, {
+                field: 'PointsDate',
+                title: ' 使用时间',
+                align: 'center',
+            }, {
+                field: 'UnitName',
+                title: ' 门店',
+                align: 'center'
+            }];
+
+            var querys = function query(params) {
+                return params;
+            }
+
+            //初始化表格信息
+            InitiTable("dataTable", '@Url.Action("../Vip/GetPointsByVipId",new {VipId=Model.Id })', colitems, querys)
+
+
+            $(".nav>li").click(function () {
+                $(".tab-content>div:eq(" + $(this).index() + ")").addClass("active").siblings().removeClass("active")
+
+                //懒加载 相应的表格
+                if (Index > 0) {
+                    if ($(this).index() == 1) {  //加载余额使用明细
+                        $table = $("#dataTable2");
+                        colitems = [
+                                    {
+                                        field: 'Name',
+                                        title: ' 使用途径',
+                                        align: 'center'
+                                    }, {
+                                        field: 'Amount',
+                                        title: ' 使用余额',
+                                        align: 'center'
+                                    }, {
+                                        field: 'AmountDate',
+                                        title: ' 使用时间',
+                                        align: 'center',
+                                    }, {
+                                        field: 'UnitName',
+                                        title: ' 门店',
+                                        align: 'center'
+                                    }];
+
+                        InitiTable("dataTable", '@Url.Action("../Vip/GetAmountByVipId", new {VipId=Model.Id })', colitems, querys)
+                        Index = parseInt(Index) + 1;
+                    } else if ($(this).index() == 2) { //订单使用明细
+                        $table = $("#dataTable3");
+                        colitems = [
+                                    {
+                                        field: 'OrderNo',
+                                        title: ' 订单编号',
+                                        align: 'center'
+                                    }, {
+                                        field: 'UsePoint',
+                                        title: ' 使用积分',
+                                        align: 'center'
+                                    }, {
+                                        field: 'UseAmount',
+                                        title: ' 使用余额',
+                                        align: 'center',
+                                    }, {
+                                        field: 'TotalAmount',
+                                        title: ' 总金额',
+                                        align: 'center'
+                                    }, {
+                                        field: 'ActualAmount',
+                                        title: ' 实付款',
+                                        align: 'center'
+                                    }, {
+                                        field: 'UnitName',
+                                        title: ' 购买门店',
+                                        align: 'center'
+                                    }, {
+                                        field: 'UserName',
+                                        title: ' 服务员工',
+                                        align: 'center',
+                                    }, {
+                                        field: 'Name',
+                                        title: ' 购买渠道',
+                                        align: 'center'
+                                    }, {
+                                        field: 'CouponMoney',
+                                        title: ' 抵用优惠券金额',
+                                        align: 'center',
+                                    }, {
+                                        field: 'Discount',
+                                        title: ' 享受折扣',
+                                        align: 'center'
+                                    }];
+
+                        InitiTable("dataTable", '@Url.Action("../Order/GetOrderByVip", new {VipId=Model.Id })', colitems, querys)
+                        Index = parseInt(Index) + 1;
+                    } else if ($(this).index() == 3) { //优惠券使用明细
+                        $table = $("#dataTable4");
+                        colitems = [
+                                    {
+                                        field: 'CouponMoney',
+                                        title: ' 券金额',
+                                        align: 'center'
+                                    }, {
+                                        field: 'CouponName',
+                                        title: ' 券名称',
+                                        align: 'center'
+                                    }, {
+                                        field: 'IsUse',
+                                        title: ' 是否使用',
+                                        align: 'center',
+                                        formatter: function (value, row, index) {
+                                            if (value == "1") {
+                                                return '<img src="../../Content/img/tick.png" />';
+                                            } else {
+                                                return '<img src="../../Content/img/cross.png" />';
+                                            }
+                                        }
+                                    }, {
+                                        field: 'CouponStatus',
+                                        title: ' 状态',
+                                        align: 'center',
+                                        formatter: function (value, row, index) {
+                                            if (value == "1") {
+                                                return "已使用"
+                                            }
+
+                                            if (value == "-1") {
+                                                return "已过期";
+                                            }
+
+                                            if (value == "0") {
+                                                return "正常";
+                                            }
+                                        }
+                                    }];
+                        InitiTable("dataTable", '@Url.Action("../Vip/GetCouponByVipId", new {VipId=Model.Id })', colitems, querys)
+                        Index = parseInt(Index) + 1;
+                    }
+                }
+            });
+        });
+
+        function responseHandler(res) {
+            return res;
+        }
+
+        //积分模块框
+        $(".btnPoints").click(function (params) {
+            $('#PointsModal').modal('show');
+        });
+
+
+        //余额模块框
+        $(".btnAmount").click(function (params) {
+            $('#AmountModal').modal('show');
+        });
+
+        //成功 返回信息
+        function onPointsSuccess(data) {
+            $table = $("#dataTable");
+            $table.bootstrapTable("refresh");
+            $('#PointsModal').modal('hide');
+        }
+        //成功 返回信息
+        function onAmountSuccess(data) {
+            $table = $("#dataTable2");
+            $table.bootstrapTable("refresh");
+            $('#AmountModal').modal('hide');
+        }
+    </script>
+}

@@ -1,0 +1,274 @@
+﻿@model DataModel.GeneralModel.CouponCategory
+@section styles{
+
+    @Styles.Render("~/Content/listcss")
+    <link href="~/Content/treeview/bootstrap-treeview.css" rel="stylesheet" />
+    @Styles.Render("~/Content/formaction")
+    <style type="text/css">
+        .pagination-detail {
+            display: none;
+        }
+
+        .fixed-table-body {
+            margin-bottom: 35px;
+        }
+
+        .table-bordered th, .table-bordered td {
+            text-align: center;
+        }
+    </style>
+}
+@{
+    var ajaxOptions = new AjaxOptions
+    {
+        OnFailure = "onFailure",
+        OnSuccess = "onSuccess",
+        HttpMethod = "Post"
+    };
+}
+<div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row-fluid widget">
+        <div class="widget-body form">
+            <div class="span12">
+                <div class="col-sm-12">
+                    <div class="dataTables_wrapper form-inline span12" role="grid">
+                        <div id="toolbar">
+                            <a href="javascript:void(0)" class="btn btn-success btnAdd">添加</a>
+                        </div>
+                        <table id="dataTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE CONTENT-->
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Scripts/FormAction")
+    @Scripts.Render("~/Scripts/jqueryval")
+    @Scripts.Render("~/Scripts/list")
+    <script src="~/Scripts/tablesMergeCell/tablesMergeCell.js"></script>
+    <script type="text/javascript">
+        var $table = $('#dataTable');
+        $(function () {
+            var colitems = [{
+                field: 'UnitNames',
+                title: '',
+                align: 'center'
+            },
+            {
+                field: 'UnitName',
+                title: '',
+                align: 'center'
+            }, {
+                field: 'JanCount',
+                title: '一月',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return value + "￥";
+                }
+            }, {
+                field: 'FebCount',
+                title: '二月',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return value + "￥";
+                }
+            }, {
+                field: 'MarCount',
+                title: '三月',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return value + "￥";
+                }
+            },
+           {
+               field: 'FirstQuarter',
+               title: '第一季度',
+               align: 'center',
+               formatter: function (value, row, index) {
+                  // return (parseFloat(row.JanCount) + parseFloat(row.FebCount) + parseFloat(row.MarCount)) + "￥";
+               }
+           }, {
+               field: 'AprCount',
+               title: '四月',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   return value + "￥";
+               }
+           }, {
+               field: 'MayCount',
+               title: '五月',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   return value + "￥";
+               }
+           }
+           , {
+               field: 'JunCount',
+               title: '六月',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   return value + "￥";
+               }
+           }
+            , {
+                field: 'SecondQuarter',
+                title: '第二季度',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    //return (parseFloat(row.AprCount) + parseFloat(row.MayCount) + parseFloat(row.JunCount)) + "￥";
+                }
+            }, {
+                field: 'JulCount',
+                title: '七月',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return value + "￥";
+                }
+            }, {
+                field: 'AguCount',
+                title: '八月',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return value + "￥";
+                }
+            }
+            , {
+                field: 'SepCount',
+                title: '九月',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    return value + "￥";
+                }
+            }
+           , {
+               field: 'ThirdQuarter',
+               title: '第三季度',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   //return (parseFloat(row.JulCount) + parseFloat(row.AguCount) + parseFloat(row.SepCount)) + "￥";;
+               }
+           }, {
+               field: 'OctCount',
+               title: '十月',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   return value + "￥";
+               }
+           }, {
+               field: 'NovCount',
+               title: '十一月',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   return value + "￥";
+               }
+           }, {
+               field: 'DecCount',
+               title: '十二月',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   return value + "￥";
+               }
+           }, {
+               field: 'ForthQuarter',
+               title: '第四季度',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   //return (parseFloat(row.OctCount) + parseFloat(row.NovCount) + parseFloat(row.DecCount)) + "￥";
+               }
+           }, {
+               field: 'YearQuarter',
+               title: '',
+               align: 'center',
+               formatter: function (value, row, index) {
+                   //return (parseFloat(row.OctCount) + parseFloat(row.NovCount) + parseFloat(row.DecCount) + parseFloat(row.JulCount) + parseFloat(row.AguCount) + parseFloat(row.SepCount) + parseFloat(row.AprCount) + parseFloat(row.MayCount) + parseFloat(row.JunCount) + parseFloat(row.JanCount) + parseFloat(row.FebCount) + parseFloat(row.MarCount)) + "￥";
+               }
+           }];
+
+            var querys = function query(params) {
+                return params;
+            }
+
+
+            //初始化表格信息
+            InitiTable("dataTable", '@Url.Action("../Order/GetOrderStatistiscData")', colitems, querys)
+
+            var head = '<tr><th colspan="18" data-valign="middle" data-align="center">月季销售报表统计</th></tr>';
+            head += ' <tr><th style="vertical-align:middle;"  data-valign="middle" data-align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th data-valign="middle" data-align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th> <th colspan="4" data-valign="middle" data-align="center">第一季度</th>';
+
+            head += '<th colspan="4" data-valign="middle" data-align="center">第二季度</th> <th colspan="4" data-valign="middle" data-align="center">第三季度</th>';
+
+            head += '<th colspan="4" data-valign="middle" data-align="center">第四季度</th><th data-field="TotalCount"  data-valign="middle" data-align="center">年度汇总</th></tr>';
+
+            $("#dataTable").children("thead").children("tr:eq(0)").parent().prepend(head);
+
+
+        });
+
+        function responseHandler(res) {
+            return res;
+        }
+
+        //合并单元格
+        $table.on('load-success.bs.table', function (data) {
+            var arrays = new Array(); // new Array("销售门店", "支付方式","商品类别");  //去重的数组信息
+            var first = $table.find("tr:gt(3)");
+            var seconds = $table.find("tr");
+            var i = 0;
+            first.each(function () {
+                arrays[i] = $(this).children("td:eq(0)").html();
+                i = parseInt(i) + 1;
+            });
+           
+            var array = unique(arrays);  //去重
+
+            var first = $table.find("tbody>tr");
+            var rowspanArray = new Array();
+            var rows = 0;
+            for (var j = 0; j < array.length; j++) {
+                var Index = 0;
+                first.each(function () {
+                    if ($(this).children("td:eq(0)").html() == array[j]) {
+                        if (Index == 0) {
+                            Index = parseInt(Index) + 1;
+                        } else {
+                            $(this).children("td:eq(0)").css("display", "none");
+                            Index = parseInt(Index) + 1;
+                        }
+                    }
+                });
+               
+               
+                if (j == 0) {
+                    $table.find("tbody>tr:eq(0)").children("td:eq(0)").attr("rowspan", Index).css("vertical-align", " middle");
+                    rows = parseInt(rows) + parseInt(Index);
+                } else {
+                    $table.find("tbody>tr:eq(" + (parseInt(rows)) + ")").children("td:eq(0)").attr("rowspan", Index).css("vertical-align", " middle");
+                    rows = parseInt(rows) + parseInt(Index);
+                }
+            };
+        });
+
+
+        //js 去掉重复数据
+        function unique(arr) {
+            var tmp = new Array();
+
+            for (var m in arr) {
+                tmp[arr[m]] = 1;
+            }
+            //再把键和值的位置再次调换
+            var tmparr = new Array();
+
+            for (var n in tmp) {
+                tmparr.push(n);
+            }
+            return tmparr;
+        }
+    </script>
+}

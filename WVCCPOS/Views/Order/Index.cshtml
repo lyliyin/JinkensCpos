@@ -1,0 +1,126 @@
+﻿@model DataModel.GeneralModel.CouponCategory
+@section styles{
+
+    @Styles.Render("~/Content/listcss")
+    <link href="~/Content/treeview/bootstrap-treeview.css" rel="stylesheet" />
+    @Styles.Render("~/Content/formaction")
+    <style type="text/css">
+       
+        .fixed-table-body {
+            margin-bottom: 35px;
+        }
+    </style>
+}
+<div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN THEME CUSTOMIZER-->
+            <!-- END THEME CUSTOMIZER-->
+            <h3 class="page-title">
+                订单管理
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                </li>
+                <li><a href="#">订单列表</a><span class="divider-last">&nbsp;</span></li>
+            </ul>
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row-fluid widget">
+        <div class="widget-body form">
+            <div class="span12">
+                <div class="col-sm-12">
+                    <div class="dataTables_wrapper form-inline span12" role="grid">
+                        <div id="toolbar">
+                            <input type="text" name="OrderNo" id="OrderNo" />
+                            <a href="javascript:void(0)" class="btn btn-success btnAdd"><i class="icon-search icon-white"></i>搜索</a>
+                        </div>
+                        <table id="dataTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE CONTENT-->
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Scripts/list")
+
+    <script type="text/javascript">
+        var $table = $('#dataTable');
+     
+        $(function () {
+            var colitems = [
+           {
+               field: 'OrderNo',
+               title: ' 订单编号',
+               align: 'center'
+           }, {
+               field: 'UsePoint',
+               title: ' 使用积分',
+               align: 'center'
+           }, {
+               field: 'UseAmount',
+               title: ' 使用余额',
+               align: 'center',
+           }, {
+               field: 'TotalAmount',
+               title: ' 总金额',
+               align: 'center'
+           }, {
+               field: 'ActualAmount',
+               title: ' 实付款',
+               align: 'center'
+           }, {
+               field: 'UnitName',
+               title: ' 购买门店',
+               align: 'center'
+           }, {
+               field: 'UserName',
+               title: ' 服务员工',
+               align: 'center',
+           }, {
+               field: 'Name',
+               title: ' 购买渠道',
+               align: 'center'
+           }, {
+               field: 'CouponMoney',
+               title: ' 抵用优惠券金额',
+               align: 'center',
+           }, {
+               field: 'Discount',
+               title: ' 享受折扣',
+               align: 'center'
+           }, {
+               field: 'Id',
+               title: ' 操作',
+               align: 'center',
+               formatter: function (value, row, index) {
+                  // return '<a href="../Vip/IndexII/' + row.Id + '" class="btn-mini btn btn-warning"><i class="icon-eye-open"></i>详情</a>';
+               }
+           }];
+
+            var querys = function query(params) {
+                var OrderNo=$("#OrderNo").val();
+                params["Paramter"] = { OrderNo: OrderNo };
+                return params;
+            }
+
+            $(".btnAdd").click(function () {
+                $table.bootstrapTable("refresh");
+            });
+
+            //初始化表格信息
+            InitiTable("dataTable", '@Url.Action("../Order/GetOrdersByOrderNo")', colitems, querys)
+        });
+
+        function responseHandler(res) {
+            return res;
+        }
+    </script>
+}
