@@ -18,8 +18,7 @@ namespace CPOS.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        int i = "";
-        int Test = "小银子520";
+      
 
         //public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         //{

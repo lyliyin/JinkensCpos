@@ -186,23 +186,29 @@ namespace ConsoleTest
         static void Main(string[] args)
         {
 
-            JsonToXml();
-            Console.ReadLine();
 
-            while (true)
-            {
-                string test = Console.ReadLine();
 
-                string a = JsonConvert.DeserializeObject<string>(test);
 
-                Console.WriteLine(a);
-                Console.ReadLine();
-            }
+
+
+
+            //JsonToXml();
+            //Console.ReadLine();
+
+            //while (true)
+            //{
+            //    string test = Console.ReadLine();
+
+            //    string a = JsonConvert.DeserializeObject<string>(test);
+
+            //    Console.WriteLine(a);
+            //    Console.ReadLine();
+            //}
           
 
-            Program p = null; new Program();
-            bool? b = p?.IsEnabled;   //可空
-            Console.WriteLine(b);
+            //Program p = null; new Program();
+            //bool? b = p?.IsEnabled;   //可空
+            //Console.WriteLine(b);
             Console.ReadLine();
             //Stopwatch st = new Stopwatch();
             ////st.Start();
