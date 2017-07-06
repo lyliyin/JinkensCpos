@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -41,10 +42,25 @@ namespace WebApiAuthorize.Comm
                 return caller.FindFirst("name").Value.ToString();
             }
         }
-
-        
-
     }
+
+    public class Response
+    {
+        public string State { get; set; }
+        public string Message { get; set; }
+        public object Data { get; set; }
+    }
+
+
+    public static class JsonTools
+    {
+        public static string ToJson(this Response result)
+        {
+            return JsonConvert.SerializeObject(result);
+        }
+    }
+
+
     public class posBase
     {
         [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
@@ -55,10 +71,10 @@ namespace WebApiAuthorize.Comm
 
             public override void OnActionExecuting(HttpActionContext actionContext)
             {
+
                 // 0011 
                 //CustomerID = "b40cde63be3240f18302e001111a9cfb";
                 actionContext.ActionArguments.Add("ClientId", CustomerID);
-
                 //
                 try
                 {

@@ -48,7 +48,7 @@ namespace CPOS.Controllers
             {
                 _userManager = value;
             }
-            internal a="";
+            
         }
 
         //

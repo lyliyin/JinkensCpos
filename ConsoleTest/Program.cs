@@ -17,6 +17,9 @@ using System.Diagnostics;
 using System.Collections.Concurrent;
 using System.Xml;
 using System.ComponentModel;
+using System.Reflection;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace ConsoleTest
 {
@@ -136,7 +139,7 @@ namespace ConsoleTest
             Thread.Sleep(5000);
             Console.WriteLine("小俊子");
         }
-     
+
         public bool IsEnabled { get; set; } = false;
 
 
@@ -183,13 +186,87 @@ namespace ConsoleTest
         }
 
 
+        public class Question
+        {
+            public string QUestionName { get; set; }
+            public string ItemId { get; set; }
+
+            public List<Question> InitialItems()
+            {
+                return new List<Question>()
+                {
+                     new Question() { QUestionName="您的爱好？ ", ItemId="打篮球" },
+                     new Question() { QUestionName="您的爱好？ ", ItemId="看电影" },
+                     new Question() { QUestionName="您的爱好？ ", ItemId="听歌" },
+                     new Question() { QUestionName="您的爱好？ ", ItemId="旅游" },
+                     new Question() { QUestionName="您的爱好？ ", ItemId="逛街" },
+                     new Question() { QUestionName="您的性别？ ", ItemId="男" },
+                     new Question() { QUestionName="您的性别？ ", ItemId="女" },
+                     new Question() { QUestionName="您的年龄？ ", ItemId="23" },
+                     new Question() { QUestionName="您喜欢的女星？ ", ItemId="杨幂" },
+                     new Question() { QUestionName="您喜欢女星？ ", ItemId="赵丽颖" },
+                     new Question() { QUestionName="您喜欢女星", ItemId="刘亦菲" }
+                };
+            }
+
+        }
+
+        public class Test1
+        {
+            public string QuestionName { get; set; }
+        }
+
+        public class Test2
+        {
+            public string ItemId { get; set; }
+        }
+
         static void Main(string[] args)
         {
+            #region 完整备份
+
+            //Question question = new Question();
+            //List<Question> lst = question.InitialItems();
+
+            //var a = lst.GroupBy(m => m.QUestionName, n => new Test2 { ItemId = n.ItemId });
+
+            //ILookup<string, List<Test2>> test = lst.ToLookup
+            //    (cfg => cfg.QUestionName,
+            //    cfg => lst.Where(m => m.ItemId == cfg.ItemId).Select(m => new Test2() { ItemId = m.ItemId }).ToList());
+
+
+            //ILookup<string, Test2> test2 = lst.ToLookup
+            //    (cfg => cfg.QUestionName,
+            //    cfg => new Test2() { ItemId = cfg.ItemId });
+
+
+            //ILookup<Test1, Test2> test3 = lst.ToLookup
+            //    (cfg => new Test1() { QuestionName = cfg.QUestionName },
+            //    cfg => new Test2() { ItemId = cfg.ItemId });
+
+
+            //foreach (var item in test2)
+            //{
+            //    Console.WriteLine(item.Key);
+
+            //    foreach (var nitem in item)
+            //    {
+            //        if (nitem == item.FirstOrDefault())
+            //        {
+            //            Console.WriteLine("First");
+            //        }
+            //        Console.WriteLine(nitem.ItemId);
+            //        //Console.WriteLine(String.Join(",", nitem.Select(m=>m.ItemId)));
+            //    }
 
 
 
-
-
+            //    //foreach (Question items in item[item.Key])
+            //    //{
+            //    //    Console.WriteLine(items);
+            //    //}
+            //}
+            //Console.ReadLine();
 
 
             //JsonToXml();
@@ -204,12 +281,12 @@ namespace ConsoleTest
             //    Console.WriteLine(a);
             //    Console.ReadLine();
             //}
-          
+
 
             //Program p = null; new Program();
             //bool? b = p?.IsEnabled;   //可空
             //Console.WriteLine(b);
-            Console.ReadLine();
+            //Console.ReadLine();
             //Stopwatch st = new Stopwatch();
             ////st.Start();
             ////List<Action> actionlist = new List<Action>();
@@ -281,8 +358,7 @@ namespace ConsoleTest
             //tasklist.Add(task1);
             //Task.WaitAll(tasklist.ToArray(), 5000);
             //Console.WriteLine("小银子");
-            Console.WriteLine(DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond + ".xls");
-            Console.ReadLine();
+
             ////st.Start();
             ////var result1=list.Where(m => m > 1000);
             ////st.Stop();
@@ -343,7 +419,7 @@ namespace ConsoleTest
             //watch.Stop();
             //Console.WriteLine(lst.Count + "-----" + Index + "---ss--" + watch.Elapsed.Milliseconds);
 
-            Console.ReadLine();
+            //Console.ReadLine();
 
 
             //  Console.WriteLine(DateTime.Now.ToString("yyyyMMddHHmmss")+DateTime.Now.Millisecond);
@@ -374,7 +450,7 @@ namespace ConsoleTest
 
             //    SetService.Add("User", item.Id);
             //}
-            Console.WriteLine("随机完成");
+
             //{
             //    //订单 奖励规则还没设计呢
             //    BuinessDBContext context = new BuinessDBContext();
@@ -545,8 +621,6 @@ namespace ConsoleTest
             //    Console.WriteLine("随机完成");
             //    Index++;
             //}
-            Console.WriteLine("全部随机完成");
-
 
 
             //for (int i = 0; i < TaskCount; i++)
@@ -564,7 +638,7 @@ namespace ConsoleTest
 
             //Task.WaitAll(tasklist.ToArray());
             //Console.WriteLine("全部完成");
-            Console.ReadLine();
+            //Console.ReadLine();
             //int taskCount = 20;
             //DateTime dtStart = DateTime.Now;
             //DataTable dt = Tools.ToDataTable().Tables[0];
@@ -621,19 +695,26 @@ namespace ConsoleTest
             //base64string到byte[]再到图片的转换：
 
 
+            #endregion
 
             #region 完整版
             //第三方授权
-            //const string url = "http://localhost:65180/";    /*--授权服务器*/
-            //const string newurl = "http://localhost:63009/";  /*需要授权的资源信息*/
-            //var client = new HttpClient();
+            const string url = "http://localhost:65180/";    /*--授权服务器*/
+            var client = new HttpClient();
 
             //string content = "grant_type=client_credentials&name=小银子&password=#123%";
-            //var rst = client.PostAsync(url + "conntection/gettoken", new StringContent(content)).Result.Content.ReadAsStringAsync().Result;
+            //var rst = client.PostAsync(url + "token", new StringContent(content)).Result.Content.ReadAsStringAsync().Result;
             //var obj = JsonConvert.DeserializeObject<Token>(rst);
-            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", obj.AccessToken);
+            //直接用token 令牌 去 获取权限接口信息
+            string token = "MBNpvoO_-9jdz1HvrpbdxSZz98LNRag7QoSijV5cfwfH4kW3wrgZJEslIq8wuSAKAdB_78hAQ3kxVU3Ej85gHdH1WrwZDqmUhIU6B2I1tKsHsk4z2ZB3ZdZ6bE1C_8xwBun-V2FDFXtjTMlRMASGtA6s0z3gUtRmxRyvHBt2r1B3mYO6KSd-JsSM0kbrWnWcMDkeMBMGASjqh95aurwnnHJr64SLqTRV6jx9xMt5ZFrioxbPapgahOO4XVIn66Ob0unH63RB46G8n347G_SHfFL2tP7uRYKjn7JwL30tsYZuDVQT3Xr65wqdWUHUNMSDL";
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             //Console.WriteLine(obj.AccessToken);
             //Console.WriteLine(DateTime.Now);
+            //Console.WriteLine(obj.toJson());
+          
+            string values = client.GetStringAsync(url + "api/values/Get?Id=3").Result;
+            Console.WriteLine(values);
+            Console.ReadLine();
 
             //while (true)
             //{
